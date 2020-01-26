@@ -14,8 +14,8 @@ if not TENANT_ID:
      raise ValueError("Need to define TENANT_ID environment variable")
 
 
-# AUTHORITY = "https://login.microsoftonline.com/common"  # For multi-tenant app
-AUTHORITY = "https://login.microsoftonline.com/" + TENANT_ID
+AUTHORITY = "https://login.microsoftonline.com/common"  # For multi-tenant app
+# AUTHORITY = "https://login.microsoftonline.com/" + TENANT_ID
 
 
 REDIRECT_PATH = "/getAToken"  # It will be used to form an absolute URL

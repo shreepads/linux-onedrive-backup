@@ -8,7 +8,8 @@
     <h2>Welcome {{ user.get("name") }}!</h2>
 
     {% if config.get("ENDPOINT") %}
-      <li><a href='/graphcall'>Call Microsoft Graph API</a></li>
+      <li><a href='/graphcall'>Basic User Details</a></li>
+      <li><a href='/onedrive'>OneDrive files</a></li>
     {% endif %}
 
     {% if config.get("B2C_PROFILE_AUTHORITY") %}

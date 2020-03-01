@@ -1,4 +1,5 @@
 import uuid
+import json
 import requests
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask_session import Session  # https://pythonhosted.org/Flask-Session
@@ -61,6 +62,26 @@ def graphcall():
         ).json()
     return render_template('display.html', result=graph_data)
 
+@app.route("/onedrive")
+def onedrive():
+    token = _get_token_from_cache(app_config.SCOPE)
+    if not token:
+        return redirect(url_for("login"))
+    graph_data = requests.get(  # Use token to call downstream service
+        app_config.DRIVE_ENDPOINT + "/root/children",
+        headers={'Authorization': 'Bearer ' + token['access_token']},
+        ).json()
+    # cloudbackupfolder_driveitemid = _get_cloudbackupfolder_driveitemid(graph_data)
+    cloudbackupfolder_driveitemid = "E0FB77428DAD5E45!125"  # Temp hack to get to the files
+    if cloudbackupfolder_driveitemid:
+        graph_data = requests.get(  # Use token to call downstream service
+    	    app_config.DRIVE_ENDPOINT + "/items/" + cloudbackupfolder_driveitemid + "/children",
+    	    headers={'Authorization': 'Bearer ' + token['access_token']},
+            ).json()
+    else:
+        graph_data = { "Error" : "Cannot find " + CLOUDBACKUP_FOLDER_NAME + " in root OneDrive" }
+
+    return render_template('display.html', result=graph_data)
 
 def _load_cache():
     cache = msal.SerializableTokenCache()
@@ -91,6 +112,15 @@ def _get_token_from_cache(scope=None):
         result = cca.acquire_token_silent(scope, account=accounts[0])
         _save_cache(cache)
         return result
+
+def _get_cloudbackupfolder_driveitemid(onedriveroot_children):
+    onedriveroot_children_list = onedriveroot_children["value"]
+    cloudbackupfolder_driveitemid = None
+    for i in onedriveroot_children_list:
+        if i["name"] == app_config.CLOUDBACKUP_FOLDER_NAME:
+            cloudbackupfolder_driveitemid = i["id"]
+    return cloudbackupfolder_driveitemid
+    
 
 app.jinja_env.globals.update(_build_auth_url=_build_auth_url)  # Used in template
 

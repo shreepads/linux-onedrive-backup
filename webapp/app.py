@@ -18,6 +18,7 @@ def index():
         return redirect(url_for("login"))
     return render_template('index.html', user=session["user"], version=msal.__version__)
 
+
 @app.route("/login")
 def login():
     session["state"] = str(uuid.uuid4())
@@ -25,6 +26,7 @@ def login():
     # here we choose to also collect end user consent upfront
     auth_url = _build_auth_url(scopes=app_config.SCOPE, state=session["state"])
     return render_template("login.html", auth_url=auth_url, version=msal.__version__)
+
 
 @app.route(app_config.REDIRECT_PATH)  # Its absolute URL must match your app's redirect_uri set in AAD
 def authorized():
@@ -44,12 +46,14 @@ def authorized():
         _save_cache(cache)
     return redirect(url_for("index"))
 
+
 @app.route("/logout")
 def logout():
     session.clear()  # Wipe out user and its token cache from session
     return redirect(  # Also logout from your tenant's web session
         app_config.AUTHORITY + "/oauth2/v2.0/logout" +
         "?post_logout_redirect_uri=" + url_for("index", _external=True))
+
 
 @app.route("/graphcall")
 def graphcall():
@@ -62,6 +66,7 @@ def graphcall():
         ).json()
     return render_template('display.html', result=graph_data)
 
+
 @app.route("/onedrive")
 def onedrive():
     token = _get_token_from_cache(app_config.SCOPE)
@@ -71,8 +76,10 @@ def onedrive():
         app_config.DRIVE_ENDPOINT + "/root/children",
         headers={'Authorization': 'Bearer ' + token['access_token']},
         ).json()
-    # cloudbackupfolder_driveitemid = _get_cloudbackupfolder_driveitemid(graph_data)
-    cloudbackupfolder_driveitemid = "E0FB77428DAD5E45!125"  # Temp hack to get to the files
+    cloudbackupfolder_driveitemid = _get_cloudbackupfolder_driveitemid(graph_data)
+    
+    #cloudbackupfolder_driveitemid = "E0FB77428DAD5E45!125"  # Temp hack to get to the files in date folder
+    
     if cloudbackupfolder_driveitemid:
         graph_data = requests.get(  # Use token to call downstream service
     	    app_config.DRIVE_ENDPOINT + "/items/" + cloudbackupfolder_driveitemid + "/children",
@@ -81,7 +88,20 @@ def onedrive():
     else:
         graph_data = { "Error" : "Cannot find " + CLOUDBACKUP_FOLDER_NAME + " in root OneDrive" }
 
-    return render_template('display.html', result=graph_data)
+    return render_template('folderlist.html', folderlist=graph_data["value"])
+
+
+@app.route("/onedrive/<itemid>")
+def folderlist(itemid):
+    token = _get_token_from_cache(app_config.SCOPE)
+    if not token:
+        return redirect(url_for("login"))
+    graph_data = requests.get(  # Use token to call downstream service
+        app_config.DRIVE_ENDPOINT + "/items/" + itemid + "/children",
+        headers={'Authorization': 'Bearer ' + token['access_token']},
+        ).json()
+    return render_template('folderlist.html', folderlist=graph_data["value"])
+
 
 def _load_cache():
     cache = msal.SerializableTokenCache()
@@ -89,20 +109,24 @@ def _load_cache():
         cache.deserialize(session["token_cache"])
     return cache
 
+
 def _save_cache(cache):
     if cache.has_state_changed:
         session["token_cache"] = cache.serialize()
+
 
 def _build_msal_app(cache=None, authority=None):
     return msal.ConfidentialClientApplication(
         app_config.CLIENT_ID, authority=authority or app_config.AUTHORITY,
         client_credential=app_config.CLIENT_SECRET, token_cache=cache)
 
+
 def _build_auth_url(authority=None, scopes=None, state=None):
     return _build_msal_app(authority=authority).get_authorization_request_url(
         scopes or [],
         state=state or str(uuid.uuid4()),
         redirect_uri=url_for("authorized", _external=True))
+
 
 def _get_token_from_cache(scope=None):
     cache = _load_cache()  # This web app maintains one cache per session
@@ -113,12 +137,16 @@ def _get_token_from_cache(scope=None):
         _save_cache(cache)
         return result
 
+
 def _get_cloudbackupfolder_driveitemid(onedriveroot_children):
+    print("OneDrive root folder's children:")
+    print(json.dumps(onedriveroot_children, indent=4))
     onedriveroot_children_list = onedriveroot_children["value"]
     cloudbackupfolder_driveitemid = None
     for i in onedriveroot_children_list:
         if i["name"] == app_config.CLOUDBACKUP_FOLDER_NAME:
             cloudbackupfolder_driveitemid = i["id"]
+    print("Returning cloud backup folder app_config.CLOUDBACKUP_FOLDER_NAME id: " + cloudbackupfolder_driveitemid)
     return cloudbackupfolder_driveitemid
     
 

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Folder List</h1>
+        {% for item in folderlist %}
+            <li><a href="{{ "/onedrive/" + item["id"] }}">{{ item["name"] }}</a></li>
+        {% endfor %}
+    <a href="javascript:window.history.go(-1)">Back</a>
+</body>
+</html>
+

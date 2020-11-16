@@ -28,7 +28,7 @@ This repo provides
 
 1. Sign-in to Onedrive's web UI, create an appropriate folder structure and upload the split GPG files and the hashsum files. The web UI is able to handle multiple uploads and queuing of requests.
 
-1. Once the upload is complete, start the webapp and compare the split GPG hashsums reported by the tool (using the OneDrive API) with the computed values
+1. Once the upload is complete, start the webapp and compare the split GPG hashsums reported by the tool (using the OneDrive API) with the computed values. See the /webapp README for details.
 
 1. Delete the split GPG files and the single GPG file. Maintain the ZIP file created in Step 1 as long as practical.
 

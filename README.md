@@ -21,6 +21,7 @@ This repo provides
 1. Split the resulting file `important.zip.gpg` into chunks that can be easily uploaded from your browser using Onedrive's web interface and the reliability and speed of your network connection (e.g. 100MB, 1GB)
 
    `$ split -b 100M important.zip.gpg important.zip.gpg.`
+   
    `$ split -b 1G important.zip.gpg important.zip.gpg.`
 
 1. Calculate MD5, SHA1 and SHA256 sums of the full GPG files and the split GPG files and write these to 3 separate files

@@ -6,14 +6,15 @@ that the encrypted files were stored properly.
 
 ## Setup
 
-1. Use your MS Live login and register an app as per the instructions at: https://docs.microsoft.com/en-us/graph/auth-register-app-v2
+1. Use your Microsoft login and register an app as per the instructions under Step 2 and Step 3 at: https://github.com/Azure-Samples/ms-identity-python-webapp/blob/master/README.md
 
-1. Setup the app permissions and redirect URI
-
-1. Note down the following values for your app:
-   * App/ Client Id
-   * App/ Client Secret
-   * Tenant Id
+   * Login to the Azure portal using your personal Microsoft account
+   * Register a new application that supports all accounts (organisational and personal)
+   * And has the following redirect URI: `http://localhost:5000/getAToken`
+   * On the overview page record the following ids: Application (client) ID, Directory (tenant) ID
+   * Create a new client secret (as per the instructions) with a 1 year expiry) and record it
+   * Give the app the following Microsoft Graph API 'delegated' permissions (as 
+     per the instructions): User.Read, User.ReadBasic.All, Files.Read
 
 1. Clone this repository:
 
@@ -27,7 +28,7 @@ that the encrypted files were stored properly.
    
    `$ source venv/bin/activate`
    
-1. Install the requirements
+1. cd into the webapp folder and install the requirements
 
    `(venv)$ pip install -r requirements.txt`
    
@@ -36,7 +37,7 @@ that the encrypted files were stored properly.
 
 1. cd into the webapp/ folder and check the virtual environment is active
 
-1. Setup the App/ Client Id, App/ Client Secret and Tenant Id as environment variables
+1. Setup the App/ Client Id, App/ Client Secret and Directory/ Tenant Id as environment variables
 
    `(venv)$ read CLIENT_ID`
    
@@ -48,12 +49,11 @@ that the encrypted files were stored properly.
    
 1. Run the webapp
 
-   `(venv)$ flask run --port 5000`
+   `(venv)$ flask run --host localhost --port 5000`
    
-1. Open in browser as http://localhost:5000 (don't use the IP based URL output by Flask)
+1. Open in browser as http://localhost:5000
 
-1. Click on the 'Sign In' link. Sign-in and provide consent for your app to access your
-   MS Live account details (only needed the first time)
+1. Click on the 'Sign In' link. Sign-in and provide consent for your app to access your Microsoft account details (only needed the first time)
 
 1. Click on the 'OneDrive files' link and subsequent links to navigate to the folder where
    the split gpg files are stored

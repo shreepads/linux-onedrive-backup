@@ -12,7 +12,7 @@ This repo provides
 
 ## Backup
 
-1. Create a zip archive of a given folder e.g. `important-2020-03-30.zip`
+1. Create a zip archive of a given folder e.g. `important-2020-03-30.zip` and verify it
 
 1. Encrypt the zip file using gpg and a long and complex passphrase:
 

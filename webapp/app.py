@@ -73,12 +73,13 @@ def onedrive():
     if not token:
         return redirect(url_for("login"))
     graph_data = requests.get(  # Use token to call downstream service
-        app_config.DRIVE_ENDPOINT + "/root/children",
+        app_config.DRIVE_ENDPOINT + "/root",
         headers={'Authorization': 'Bearer ' + token['access_token']},
         ).json()
-    cloudbackupfolder_driveitemid = _get_cloudbackupfolder_driveitemid(graph_data)
+    rootfolder_driveitemid = _get_rootfolder_driveitemid(graph_data)
     
-    #cloudbackupfolder_driveitemid = "E0FB77428DAD5E45!125"  # Temp hack to get to the files in date folder
+
+    """     cloudbackupfolder_driveitemid = "E0FB77428DAD5E45!124"  # Temp hack to get to the files in date folder
     
     if cloudbackupfolder_driveitemid:
         graph_data = requests.get(  # Use token to call downstream service
@@ -86,9 +87,9 @@ def onedrive():
     	    headers={'Authorization': 'Bearer ' + token['access_token']},
             ).json()
     else:
-        graph_data = { "Error" : "Cannot find " + CLOUDBACKUP_FOLDER_NAME + " in root OneDrive" }
+        graph_data = { "Error" : "Cannot find " + CLOUDBACKUP_FOLDER_NAME + " in root OneDrive" } """
 
-    return render_template('folderlist.html', folderlist=graph_data["value"])
+    return redirect("/onedrive/" + rootfolder_driveitemid)
 
 
 @app.route("/onedrive/<itemid>")
@@ -100,6 +101,8 @@ def folderlist(itemid):
         app_config.DRIVE_ENDPOINT + "/items/" + itemid + "/children",
         headers={'Authorization': 'Bearer ' + token['access_token']},
         ).json()
+    print("OneDrive item " + itemid + " children:")
+    print(json.dumps(graph_data, indent=4))
     return render_template('folderlist.html', folderlist=graph_data["value"])
 
 
@@ -137,6 +140,10 @@ def _get_token_from_cache(scope=None):
         _save_cache(cache)
         return result
 
+def _get_rootfolder_driveitemid(onedriveroot):
+    print("OneDrive root:")
+    print(json.dumps(onedriveroot, indent=4))
+    return onedriveroot["id"]
 
 def _get_cloudbackupfolder_driveitemid(onedriveroot_children):
     print("OneDrive root folder's children:")

@@ -6,7 +6,16 @@
 <body>
     <h1>Folder List</h1>
         {% for item in folderlist %}
-            <li><a href="{{ "/onedrive/" + item["id"] }}">{{ item["name"] }}</a></li>
+            
+            {% if item["folder"]  %}
+                <li><a href="{{ "/onedrive/" + item["id"] }}">{{ item["name"] }}</a></li>
+            {% endif %}
+
+            {% if item["file"]  %}
+                <li> {{ item["file"]["hashes"]["sha1Hash"].lower() }}  &nbsp;{{ item["name"] }}</a></li>
+            {% endif %}
+
+
         {% endfor %}
     <a href="javascript:window.history.go(-1)">Back</a>
 </body>

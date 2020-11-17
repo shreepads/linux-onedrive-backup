@@ -77,17 +77,6 @@ def onedrive():
         headers={'Authorization': 'Bearer ' + token['access_token']},
         ).json()
     rootfolder_driveitemid = _get_rootfolder_driveitemid(graph_data)
-    
-
-    """     cloudbackupfolder_driveitemid = "E0FB77428DAD5E45!124"  # Temp hack to get to the files in date folder
-    
-    if cloudbackupfolder_driveitemid:
-        graph_data = requests.get(  # Use token to call downstream service
-    	    app_config.DRIVE_ENDPOINT + "/items/" + cloudbackupfolder_driveitemid + "/children",
-    	    headers={'Authorization': 'Bearer ' + token['access_token']},
-            ).json()
-    else:
-        graph_data = { "Error" : "Cannot find " + CLOUDBACKUP_FOLDER_NAME + " in root OneDrive" } """
 
     return redirect("/onedrive/" + rootfolder_driveitemid)
 

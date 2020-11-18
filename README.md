@@ -38,9 +38,10 @@ manual backup process. A few reasons that apply to me, at the moment, in the for
    use zip as it has integrity checking and good cross-platform support but you can use any
    archival format convenient.
 
-1. Encrypt the zip file using gpg and a long and complex passphrase:
+1. Encrypt the zip file using gpg and a long and complex passphrase (defaults to AES encryption
+   as of GnuPG 2.2)
 
-   `$ gpg -c important-2020-03-30.zip`
+   `$ gpg -cv important-2020-03-30.zip`
 	
 1. Split the resulting file `important-2020-03-30.zip.gpg` into chunks that can be easily uploaded
    from your browser using OneDrive's web interface and the reliability and speed of your
@@ -56,10 +57,10 @@ manual backup process. A few reasons that apply to me, at the moment, in the for
    write these to 3 separate files. While OneDrive currently only computes SHA1 sums,
    this may change in the future (although its unlikely MD5 would be used, I've generated
    it as it's used by AWS S3).
-
-   `$ md5sum * > important-2020-03-30-md5sums.txt`
    
    `$ sha1sum * > important-2020-03-30-sha1sums.txt`
+
+   `$ md5sum * > important-2020-03-30-md5sums.txt`
    
    `$ sha256sum * > important-2020-03-30-sha256sums.txt`
 

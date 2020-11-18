@@ -6,7 +6,8 @@ that the encrypted files were stored properly.
 
 ## Setup
 
-1. Use your Microsoft login and register an app as per the instructions under Step 2 and Step 3 at: https://github.com/Azure-Samples/ms-identity-python-webapp/blob/master/README.md
+1. Use your Microsoft login and register an app as per the instructions under Step 2 and
+   Step 3 at: https://github.com/Azure-Samples/ms-identity-python-webapp/blob/master/README.md
 
    * Login to the Azure portal using your personal Microsoft account
    * Register a new application that supports all accounts (organisational and personal)
@@ -53,7 +54,8 @@ that the encrypted files were stored properly.
    
 1. Open in browser as http://localhost:5000
 
-1. Click on the 'Sign In' link. Sign-in and provide consent for your app to access your Microsoft account details (only needed the first time)
+1. Click on the 'Sign In' link. Sign-in and provide consent for your app to access your
+   Microsoft account details (only needed the first time)
 
 1. Click on the 'OneDrive files' link and subsequent links to navigate to the folder where
    the split gpg files are stored

@@ -7,7 +7,8 @@ a browser e.g. Firefox.
 
 This repo provides 
 * Steps on how to backup files to OneDrive
-* A tool that can be used to compare hashes to check the encrypted files were stored properly
+* A tool that can be used to compare hashes to check the encrypted files were stored properly.
+  See the webapp/ README for details about this tool.
 * Steps to restore the backup from OneDrive
 
 ## Why

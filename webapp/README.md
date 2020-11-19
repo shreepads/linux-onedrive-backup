@@ -14,8 +14,8 @@ files locally, allowing for an easy comparison using `git diff`.
 Note that the app is registered and entirely controlled by you so while there is some setup
 involved it doesn't allow anyone else to access your data.
 
-** The webapp provides a non encrypted http (i.e. not https) interface and as such I strongly
-recommend that it only be run and accessed locally. **
+**The webapp provides a non encrypted http (i.e. not https) interface and as such I strongly
+recommend that it only be run and accessed locally.**
 
 ## Setup
 

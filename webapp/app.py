@@ -1,5 +1,7 @@
 import uuid
 import json
+import logging
+
 import requests
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask_session import Session  # https://pythonhosted.org/Flask-Session
@@ -33,6 +35,8 @@ def authorized():
     if request.args.get('state') != session.get("state"):
         return redirect(url_for("index"))  # No-OP. Goes back to Index page
     if "error" in request.args:  # Authentication/Authorization failure
+        logging.error("Authentication failure")
+        logging.error(request.args)
         return render_template("auth_error.html", result=request.args)
     if request.args.get('code'):
         cache = _load_cache()
@@ -78,7 +82,7 @@ def onedrive():
         ).json()
     rootfolder_driveitemid = _get_rootfolder_driveitemid(graph_data)
 
-    return redirect("/onedrive/" + rootfolder_driveitemid)
+    return redirect(url_for("folderlist", itemid=rootfolder_driveitemid))
 
 
 @app.route("/onedrive/<itemid>")
@@ -90,8 +94,8 @@ def folderlist(itemid):
         app_config.DRIVE_ENDPOINT + "/items/" + itemid + "/children",
         headers={'Authorization': 'Bearer ' + token['access_token']},
         ).json()
-    print("OneDrive item " + itemid + " children:")
-    print(json.dumps(graph_data, indent=4))
+    logging.debug("OneDrive item " + itemid + " children:")
+    logging.debug(json.dumps(graph_data, indent=4))
     return render_template('folderlist.html', folderlist=graph_data["value"])
 
 
@@ -130,20 +134,9 @@ def _get_token_from_cache(scope=None):
         return result
 
 def _get_rootfolder_driveitemid(onedriveroot):
-    print("OneDrive root:")
-    print(json.dumps(onedriveroot, indent=4))
+    logging.debug("OneDrive root:")
+    logging.debug(json.dumps(onedriveroot, indent=4))
     return onedriveroot["id"]
-
-def _get_cloudbackupfolder_driveitemid(onedriveroot_children):
-    print("OneDrive root folder's children:")
-    print(json.dumps(onedriveroot_children, indent=4))
-    onedriveroot_children_list = onedriveroot_children["value"]
-    cloudbackupfolder_driveitemid = None
-    for i in onedriveroot_children_list:
-        if i["name"] == app_config.CLOUDBACKUP_FOLDER_NAME:
-            cloudbackupfolder_driveitemid = i["id"]
-    print("Returning cloud backup folder app_config.CLOUDBACKUP_FOLDER_NAME id: " + cloudbackupfolder_driveitemid)
-    return cloudbackupfolder_driveitemid
     
 
 app.jinja_env.globals.update(_build_auth_url=_build_auth_url)  # Used in template

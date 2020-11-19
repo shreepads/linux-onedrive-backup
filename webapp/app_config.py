@@ -1,5 +1,15 @@
 import os
+import logging
 
+LOG_LEVEL = os.getenv("LOG_LEVEL")
+if not LOG_LEVEL:
+     logging.basicConfig(level=logging.INFO)
+else:
+     try:
+          logging._checkLevel(LOG_LEVEL)
+          logging.basicConfig(level=LOG_LEVEL)
+     except (TypeError, ValueError):
+          logging.basicConfig(level=logging.INFO)
 
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 if not CLIENT_SECRET:
@@ -27,7 +37,6 @@ REDIRECT_PATH = "/getAToken"  # It will be used to form an absolute URL
 ENDPOINT = 'https://graph.microsoft.com/v1.0/users'  # This resource requires no admin consent
 DRIVE_ENDPOINT = "https://graph.microsoft.com/v1.0/me/drive"
 
-CLOUDBACKUP_FOLDER_NAME = "CloudBackup"   # Must be present in the OneDrive root folder
 
 # You can find the proper permission names from this document
 # https://docs.microsoft.com/en-us/graph/permissions-reference

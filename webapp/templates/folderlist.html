@@ -8,7 +8,7 @@
         {% for item in folderlist %}
             
             {% if item["folder"]  %}
-                <li><a href="{{ "/onedrive/" + item["id"] }}">{{ item["name"] }}</a></li>
+                <li><a href="{{ url_for("folderlist", itemid=item["id"]) }}">{{ item["name"] }}</a></li>
             {% endif %}
 
             {% if item["file"]  %}
@@ -17,7 +17,10 @@
 
 
         {% endfor %}
-    <a href="javascript:window.history.go(-1)">Back</a>
+    <br>
+    <hr> <a href="javascript:window.history.go(-1)">Back</a>
+    <br> <a href="{{ url_for('onedrive') }}">OneDrive root</a>
+    <br> <a href="{{ url_for('index') }}">Homepage</a>
 </body>
 </html>
 

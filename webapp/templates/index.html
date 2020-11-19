@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
 </head>
 <body>
-    <h1>Microsoft Identity Python Web App</h1>
+    <h1>Microsoft OneDrive File Hash Python Web App</h1>
     <h2>Welcome {{ user.get("name") }}!</h2>
 
     {% if config.get("ENDPOINT") %}
@@ -12,13 +12,9 @@
       <li><a href='/onedrive'>OneDrive files</a></li>
     {% endif %}
 
-    {% if config.get("B2C_PROFILE_AUTHORITY") %}
-      <li><a href='{{_build_auth_url(authority=config["B2C_PROFILE_AUTHORITY"])}}'>Edit Profile</a></li>
-    {% endif %}
-
     <li><a href="/logout">Logout</a></li>
     <hr>
-    <footer style="text-align: right">Powered by MSAL Python {{ version }}</footer>
+
 </body>
 </html>
 

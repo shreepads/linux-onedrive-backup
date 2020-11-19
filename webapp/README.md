@@ -1,8 +1,21 @@
 # linux-onedrive-backup webapp
 
 A tool that can be used to compare SHA1 hashes computed locally and by OneDrive to verify
-that the encrypted files were stored properly.
+that files uploaded via OneDrive's Web UI were stored properly.
 
+The tool is a Python Flask webapp that can be run locally on your laptop etc. After logging
+into your Microsoft account and gaining permission to read your user data and OneDrive files,
+it allows you to browse your OneDrive folder structure using Microsoft Graph APIs.
+
+In each folder diplayed the webapp shows the SHA1 hashes computed by OneDrive and the
+corresponding filename in the same format produced by sha1sum when you run it on the same
+files locally, allowing for an easy comparison using `git diff`.
+
+Note that the app is registered and entirely controlled by you so while there is some setup
+involved it doesn't allow anyone else to access your data.
+
+** The webapp provides a non encrypted http (i.e. not https) interface and as such I strongly
+recommend that it only be run and accessed locally. **
 
 ## Setup
 

@@ -54,14 +54,20 @@ recommend that it only be run and accessed locally.**
 
 1. Setup the App/ Client Id, App/ Client Secret and Directory/ Tenant Id as environment variables
 
-   `(venv)$ read CLIENT_ID`
+   `(venv)$ export CLIENT_ID=<App/ Client Id recorded>`
    
    `(venv)$ read CLIENT_SECRET`
+   Enter the App/ Client secret.
    
-   `(venv)$ read TENANT_ID`
+   `(venv)$ export CLIENT_SECRET`
+
+   `(venv)$ export TENANT_ID=<Directory/ Tenant Id recorded>`
    
-   `(venv)$ export CLIENT_ID CLIENT_SECRET TENANT_ID`
-   
+1. Optionally, set the logging level to one supported by the logging module
+   (https://docs.python.org/3/library/logging.html#levels). The default level is `INFO`.
+
+   `(venv)$ export LOG_LEVEL=DEBUG`
+
 1. Run the webapp
 
    `(venv)$ flask run --host localhost --port 5000`

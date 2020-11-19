@@ -1,6 +1,6 @@
 # linux-onedrive-backup
 
-Backup files on MS OneDrive from Linux. 
+Backup files to Microsoft OneDrive from Linux. 
 
 Note that the step to upload the encrypted backup files into MS OneDrive is handled from
 a browser e.g. Firefox.
@@ -30,7 +30,7 @@ manual backup process. A few reasons that apply to me, at the moment, in the for
 * Why use the OneDrive web UI to upload files manually: Microsoft doesn't provide a Linux
   client, there are third party clients but I don't trust they will be maintained or function
   correctly.
-* Why the special local app just to verify the hashes of the uploaded data: The OneDrive web
+* Why the special webapp just to verify the hashes of the uploaded data: The OneDrive web
   UI doesn't provide this information at all, let alone in a way that allows for an easy compare.
 
 ## Backup
@@ -44,13 +44,15 @@ manual backup process. A few reasons that apply to me, at the moment, in the for
 
    `$ gpg -cv important-2020-03-30.zip`
 	
-1. Split the resulting file `important-2020-03-30.zip.gpg` into chunks that can be easily uploaded
-   from your browser using OneDrive's web interface and the reliability and speed of your
+1. Split the resulting file `important-2020-03-30.zip.gpg` into chunks that can be uploaded
+   from your browser using OneDrive's web interface given the reliability and speed of your
    network connection (e.g. 100MB, 1GB). Note that I've found the OneDrive Web UI more
-   reliable and faster for uploading than downloading and so recommend not using chunks
+   reliable and faster for uploading than downloading and recommend not using chunks
    bigger than 1GB unless you have a very fast and stable internet connection.
 
    `$ split -b 100M important-2020-03-30.zip.gpg important-2020-03-30.zip.gpg.`
+   
+   or
    
    `$ split -b 1G important-2020-03-30.zip.gpg important-2020-03-30.zip.gpg.`
 
@@ -67,7 +69,8 @@ manual backup process. A few reasons that apply to me, at the moment, in the for
 
 1. Sign-in to OneDrive's web UI, create an appropriate folder structure and upload the
    split GPG files and the 3 files containing the MD5, SHA1 and SHA256 hashsums.
-   The web UI is able to handle multiple uploads and queuing of requests.
+   The web UI is able to handle multiple uploads and queuing of more than 3 uploads
+   (I've uploaded 30 1GB chunks in one request with no errors).
 
 1. Once the upload is complete, start the webapp and compare the split GPG SHA1 sums
    reported by the tool (using the OneDrive API) with the values computed in Step 4. See
@@ -95,9 +98,9 @@ manual backup process. A few reasons that apply to me, at the moment, in the for
 1. Verify the hash of the reassembled full GPG file with the original. If any discrepancies
    are found compare the hashes of the split GPGs, one or more download may have been corrupted.
 
-1. Decrypt the gpg file using the long passphrase
+1. Decrypt the gpg file using the passphrase
 
    `$ gpg important-2020-03-30.zip.gpg`
    
-1. Unzip the folder
+1. Check the zip file's integrity and unzip it.
 
